@@ -1,5 +1,2 @@
 com\example\Spring\Thymeleaf\ThymeleafPracticeApplication.class
-com\example\Spring\Repository\ContactRepo.class
-com\example\Spring\Entity\FormEntity.class
-com\example\Spring\Thymeleaf\Service\ContactService.class
 com\example\Spring\Thymeleaf\Controller\Home.class
