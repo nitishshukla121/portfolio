@@ -2,325 +2,342 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Introduction</title>
-<!-- Favicon-->
-<link rel="icon" type="image/x-icon"
-	th:href="@{/assets/images/favicon.ico}" />
-<!-- Custom Google font-->
+<title th:text="${profile.fullName} + ' | Portfolio'">Nitish Shukla | Portfolio</title>
+<link rel="icon" type="image/x-icon" th:href="@{/assets/images/favicon.ico}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
-	rel="stylesheet" />
-<!-- Bootstrap icons-->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"
-	rel="stylesheet" />
-<!-- Core theme CSS (includes Bootstrap)-->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
 <link th:href="@{/assets/css/styles.css}" rel="stylesheet" />
-</head>
-<body class="d-flex flex-column h-100">
-	<main class="flex-shrink-0">
-		<!-- Navigation-->
-		<div th:replace="header :: header"></div>
+<style>
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 80px; }
 
-		<!-- Header-->
-		<header class="py-5">
+    /* ---- Animated gradient hero background ---- */
+    header.hero-header {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(-45deg, #6f42c1, #0d6efd, #20c997, #6f42c1);
+        background-size: 400% 400%;
+        animation: gradientShift 12s ease infinite;
+    }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    header.hero-header .badge,
+    header.hero-header .fs-3,
+    header.hero-header h1 span { color: #fff !important; }
+    header.hero-header .text-gradient { background: none; -webkit-text-fill-color: #fff; color: #fff; }
+
+    /* ---- Floating profile image ---- */
+    .profile-img { animation: floatY 4s ease-in-out infinite; }
+    @keyframes floatY {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-16px); }
+    }
+
+    /* ---- Scroll reveal ---- */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* ---- Project & resume cards ---- */
+    .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 1rem 2rem rgba(111,66,193,0.25) !important; }
+
+    /* ---- Colorful skill pills ---- */
+    .skill-pill {
+        transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease;
+        cursor: default;
+        border: 2px solid transparent;
+    }
+    .skill-pill:hover { transform: translateY(-4px) scale(1.03); }
+    .skill-pill:nth-child(9n+1) { border-color: #6f42c1; }
+    .skill-pill:nth-child(9n+2) { border-color: #0d6efd; }
+    .skill-pill:nth-child(9n+3) { border-color: #20c997; }
+    .skill-pill:nth-child(9n+4) { border-color: #fd7e14; }
+    .skill-pill:nth-child(9n+5) { border-color: #d63384; }
+    .skill-pill:nth-child(9n+6) { border-color: #0dcaf0; }
+    .skill-pill:nth-child(9n+7) { border-color: #ffc107; }
+    .skill-pill:nth-child(9n+8) { border-color: #198754; }
+    .skill-pill:nth-child(9n+9) { border-color: #6610f2; }
+
+    /* ---- Social icon pop on hover ---- */
+    .social-icon { display: inline-block; transition: transform 0.25s ease; }
+    .social-icon:hover { transform: scale(1.25) rotate(-6deg); }
+
+    /* ---- Nav underline animation ---- */
+    .navbar-nav .nav-link { position: relative; }
+    .navbar-nav .nav-link::after {
+        content: ""; position: absolute; left: 0; bottom: 0;
+        width: 0; height: 2px; background: linear-gradient(90deg,#6f42c1,#0d6efd);
+        transition: width 0.3s ease;
+    }
+    .navbar-nav .nav-link:hover::after { width: 100%; }
+
+    /* ---- Button glow ---- */
+    .btn-primary { position: relative; overflow: hidden; }
+    .btn-primary:hover { box-shadow: 0 0 20px rgba(111,66,193,0.6); }
+
+    /* ---- Section wave divider under hero ---- */
+    .wave-divider { display: block; width: 100%; line-height: 0; margin-top: -1px; }
+    .wave-divider svg { width: 100%; height: 60px; display: block; }
+
+    /* ---- Section background washes ---- */
+    #about {
+        background: linear-gradient(180deg, #f3f0ff 0%, #eef6ff 100%);
+    }
+    #resume {
+        background: linear-gradient(180deg, #fff8f0 0%, #f3f0ff 100%);
+    }
+    #contact {
+        background: linear-gradient(180deg, #eefaf5 0%, #eef6ff 100%);
+    }
+
+    /* ---- Section heading accent underline ---- */
+    .section-heading { position: relative; display: inline-block; padding-bottom: 0.5rem; }
+    .section-heading::after {
+        content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+        width: 70px; height: 4px; border-radius: 4px;
+        background: linear-gradient(90deg, #6f42c1, #0d6efd, #20c997);
+    }
+
+    /* ---- Project card colored accent bar ---- */
+    .project-card { border-left: 6px solid transparent !important; }
+    .project-card.accent-0 { border-left-color: #6f42c1 !important; }
+    .project-card.accent-1 { border-left-color: #0d6efd !important; }
+    .project-card.accent-2 { border-left-color: #20c997 !important; }
+    .project-card.accent-3 { border-left-color: #fd7e14 !important; }
+
+    /* ---- Timeline dot accent for experience/education ---- */
+    .timeline-card { border-left: 5px solid #0d6efd !important; }
+    .timeline-card.edu-card { border-left: 5px solid #20c997 !important; }
+</style>
+</head>
+<body class="d-flex flex-column h-100" id="top">
+	<main class="flex-shrink-0">
+
+		<!-- ===== NAV (inline, no fragment) ===== -->
+		<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 sticky-top">
+			<div class="container px-5">
+				<a class="navbar-brand" href="#top"><span class="fw-bolder text-primary">Nitish's Portfolio</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+						data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+						<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+						<li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+						<li class="nav-item"><a class="nav-link" href="#resume">Resume</a></li>
+						<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!-- ===== HERO ===== -->
+		<header class="py-5 hero-header">
 			<div class="container px-5 pb-5">
 				<div class="row gx-5 align-items-center">
 					<div class="col-xxl-5">
-						<!-- Header text content-->
 						<div class="text-center text-xxl-start">
-							<div
-								class="badge bg-gradient-primary-to-secondary text-white mb-4">
-								<div class="text-uppercase">Java Developer &middot; Spring
-									Boot &middot; Microservices </div>
+							<div class="badge bg-gradient-primary-to-secondary text-white mb-4">
+								<div class="text-uppercase">Java Developer &middot; Spring Boot &middot; Microservices</div>
 							</div>
-							<div class="fs-3 fw-light text-muted">Building scalable,
-								high-performance applications with Java, Spring Boot,
-								Microservices , and Databases.</div>
+							<div class="fs-3 fw-light text-muted" th:text="${profile.tagline}">Tagline</div>
 							<h1 class="display-3 fw-bolder mb-5">
-								<span class="text-gradient d-inline">Building scalable
-									web apps.</span>
+								<span class="text-gradient d-inline">Building scalable web apps.</span>
 							</h1>
-							<div
-								class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-								<a
-									class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"
-									th:href="@{/resume}">Resume</a> <a
-									class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder"
-									th:href="@{/project}">Projects</a>
+							<div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
+								<a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" th:href="${profile.resumeUrl}">Resume</a>
+								<a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="#projects">Projects</a>
 							</div>
 						</div>
 					</div>
 					<div class="col-xxl-7">
-						<!-- Header profile picture-->
 						<div class="d-flex justify-content-center mt-5 mt-xxl-0">
 							<div class="profile bg-gradient-primary-to-secondary">
-								<!-- TIP: For best results, use a photo with a transparent background like the demo example below-->
-								<!-- Watch a tutorial on how to do this on YouTube (link)-->
-								<img class="profile-img"
-									src="assets/images/me-removebg-preview.png" alt="..." />
-								<div class="dots-1">
-									<!-- SVG Dots-->
-									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-										viewBox="0 0 191.6 1215.4"
-										style="enable-background: new 0 0 191.6 1215.4"
-										xml:space="preserve">
-                                            <g
-											transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)">
-                                                <path
-											d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,12801.6,289.7,12808.6,227.7,12788.6z"></path>
-                                                <path
-											d="M1507.7,12788.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,12801.6,1569.7,12808.6,1507.7,12788.6z"></path>
-                                                <path
-											d="M227.7,11508.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,11521.6,289.7,11528.6,227.7,11508.6z"></path>
-                                                <path
-											d="M1507.7,11508.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,11521.6,1569.7,11528.6,1507.7,11508.6z"></path>
-                                                <path
-											d="M227.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,10241.6,289.7,10248.6,227.7,10228.6z"></path>
-                                                <path
-											d="M1507.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,10241.6,1569.7,10248.6,1507.7,10228.6z"></path>
-                                                <path
-											d="M227.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,8961.6,289.7,8968.6,227.7,8948.6z"></path>
-                                                <path
-											d="M1507.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,8961.6,1569.7,8968.6,1507.7,8948.6z"></path>
-                                                <path
-											d="M227.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,7681.6,289.7,7688.6,227.7,7668.6z"></path>
-                                                <path
-											d="M1507.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,7681.6,1569.7,7688.6,1507.7,7668.6z"></path>
-                                                <path
-											d="M227.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,6401.6,289.7,6408.6,227.7,6388.6z"></path>
-                                                <path
-											d="M1507.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,6401.6,1569.7,6408.6,1507.7,6388.6z"></path>
-                                                <path
-											d="M227.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,5121.6,289.7,5128.6,227.7,5108.6z"></path>
-                                                <path
-											d="M1507.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,5121.6,1569.7,5128.6,1507.7,5108.6z"></path>
-                                                <path
-											d="M227.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,3841.6,289.7,3848.6,227.7,3828.6z"></path>
-                                                <path
-											d="M1507.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,3841.6,1569.7,3848.6,1507.7,3828.6z"></path>
-                                                <path
-											d="M227.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,2561.6,289.7,2568.6,227.7,2548.6z"></path>
-                                                <path
-											d="M1507.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,2561.6,1569.7,2568.6,1507.7,2548.6z"></path>
-                                                <path
-											d="M227.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,1281.6,289.7,1288.6,227.7,1268.6z"></path>
-                                                <path
-											d="M1507.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,1281.6,1569.7,1288.6,1507.7,1268.6z"></path>
-                                            </g>
-                                        </svg>
-									<!-- END of SVG dots-->
-								</div>
-								<div class="dots-2">
-									<!-- SVG Dots-->
-									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-										viewBox="0 0 191.6 1215.4"
-										style="enable-background: new 0 0 191.6 1215.4"
-										xml:space="preserve">
-                                            <g
-											transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)">
-                                                <path
-											d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,12801.6,289.7,12808.6,227.7,12788.6z"></path>
-                                                <path
-											d="M1507.7,12788.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,12801.6,1569.7,12808.6,1507.7,12788.6z"></path>
-                                                <path
-											d="M227.7,11508.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,11521.6,289.7,11528.6,227.7,11508.6z"></path>
-                                                <path
-											d="M1507.7,11508.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,11521.6,1569.7,11528.6,1507.7,11508.6z"></path>
-                                                <path
-											d="M227.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,10241.6,289.7,10248.6,227.7,10228.6z"></path>
-                                                <path
-											d="M1507.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,10241.6,1569.7,10248.6,1507.7,10228.6z"></path>
-                                                <path
-											d="M227.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,8961.6,289.7,8968.6,227.7,8948.6z"></path>
-                                                <path
-											d="M1507.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,8961.6,1569.7,8968.6,1507.7,8948.6z"></path>
-                                                <path
-											d="M227.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,7681.6,289.7,7688.6,227.7,7668.6z"></path>
-                                                <path
-											d="M1507.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,7681.6,1569.7,7688.6,1507.7,7668.6z"></path>
-                                                <path
-											d="M227.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,6401.6,289.7,6408.6,227.7,6388.6z"></path>
-                                                <path
-											d="M1507.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,6401.6,1569.7,6408.6,1507.7,6388.6z"></path>
-                                                <path
-											d="M227.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,5121.6,289.7,5128.6,227.7,5108.6z"></path>
-                                                <path
-											d="M1507.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,5121.6,1569.7,5128.6,1507.7,5108.6z"></path>
-                                                <path
-											d="M227.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,3841.6,289.7,3848.6,227.7,3828.6z"></path>
-                                                <path
-											d="M1507.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,3841.6,1569.7,3848.6,1507.7,3828.6z"></path>
-                                                <path
-											d="M227.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,2561.6,289.7,2568.6,227.7,2548.6z"></path>
-                                                <path
-											d="M1507.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,2561.6,1569.7,2568.6,1507.7,2548.6z"></path>
-                                                <path
-											d="M227.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,1281.6,289.7,1288.6,227.7,1268.6z"></path>
-                                                <path
-											d="M1507.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,1281.6,1569.7,1288.6,1507.7,1268.6z"></path>
-                                            </g>
-                                        </svg>
-									<!-- END of SVG dots-->
-								</div>
-								<div class="dots-3">
-									<!-- SVG Dots-->
-									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-										viewBox="0 0 191.6 1215.4"
-										style="enable-background: new 0 0 191.6 1215.4"
-										xml:space="preserve">
-                                            <g
-											transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)">
-                                                <path
-											d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,12801.6,289.7,12808.6,227.7,12788.6z"></path>
-                                                <path
-											d="M1507.7,12788.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,12801.6,1569.7,12808.6,1507.7,12788.6z"></path>
-                                                <path
-											d="M227.7,11508.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,11521.6,289.7,11528.6,227.7,11508.6z"></path>
-                                                <path
-											d="M1507.7,11508.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,11521.6,1569.7,11528.6,1507.7,11508.6z"></path>
-                                                <path
-											d="M227.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,10241.6,289.7,10248.6,227.7,10228.6z"></path>
-                                                <path
-											d="M1507.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,10241.6,1569.7,10248.6,1507.7,10228.6z"></path>
-                                                <path
-											d="M227.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,8961.6,289.7,8968.6,227.7,8948.6z"></path>
-                                                <path
-											d="M1507.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,8961.6,1569.7,8968.6,1507.7,8948.6z"></path>
-                                                <path
-											d="M227.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,7681.6,289.7,7688.6,227.7,7668.6z"></path>
-                                                <path
-											d="M1507.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,7681.6,1569.7,7688.6,1507.7,7668.6z"></path>
-                                                <path
-											d="M227.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,6401.6,289.7,6408.6,227.7,6388.6z"></path>
-                                                <path
-											d="M1507.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,6401.6,1569.7,6408.6,1507.7,6388.6z"></path>
-                                                <path
-											d="M227.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,5121.6,289.7,5128.6,227.7,5108.6z"></path>
-                                                <path
-											d="M1507.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,5121.6,1569.7,5128.6,1507.7,5108.6z"></path>
-                                                <path
-											d="M227.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,3841.6,289.7,3848.6,227.7,3828.6z"></path>
-                                                <path
-											d="M1507.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,3841.6,1569.7,3848.6,1507.7,3828.6z"></path>
-                                                <path
-											d="M227.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,2561.6,289.7,2568.6,227.7,2548.6z"></path>
-                                                <path
-											d="M1507.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,2561.6,1569.7,2568.6,1507.7,2548.6z"></path>
-                                                <path
-											d="M227.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,1281.6,289.7,1288.6,227.7,1268.6z"></path>
-                                                <path
-											d="M1507.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,1281.6,1569.7,1288.6,1507.7,1268.6z"></path>
-                                            </g>
-                                        </svg>
-									<!-- END of SVG dots-->
-								</div>
-								<div class="dots-4">
-									<!-- SVG Dots-->
-									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-										viewBox="0 0 191.6 1215.4"
-										style="enable-background: new 0 0 191.6 1215.4"
-										xml:space="preserve">
-                                            <g
-											transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)">
-                                                <path
-											d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,12801.6,289.7,12808.6,227.7,12788.6z"></path>
-                                                <path
-											d="M1507.7,12788.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,12801.6,1569.7,12808.6,1507.7,12788.6z"></path>
-                                                <path
-											d="M227.7,11508.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,11521.6,289.7,11528.6,227.7,11508.6z"></path>
-                                                <path
-											d="M1507.7,11508.6c-151-50-253-216-222-362c25-119,136-230,254-255c194-41,395,142,375,339c-11,105-90,213-190,262        C1663.7,11521.6,1569.7,11528.6,1507.7,11508.6z"></path>
-                                                <path
-											d="M227.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,10241.6,289.7,10248.6,227.7,10228.6z"></path>
-                                                <path
-											d="M1507.7,10228.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,10241.6,1569.7,10248.6,1507.7,10228.6z"></path>
-                                                <path
-											d="M227.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,8961.6,289.7,8968.6,227.7,8948.6z"></path>
-                                                <path
-											d="M1507.7,8948.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,8961.6,1569.7,8968.6,1507.7,8948.6z"></path>
-                                                <path
-											d="M227.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,7681.6,289.7,7688.6,227.7,7668.6z"></path>
-                                                <path
-											d="M1507.7,7668.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,7681.6,1569.7,7688.6,1507.7,7668.6z"></path>
-                                                <path
-											d="M227.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,6401.6,289.7,6408.6,227.7,6388.6z"></path>
-                                                <path
-											d="M1507.7,6388.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,6401.6,1569.7,6408.6,1507.7,6388.6z"></path>
-                                                <path
-											d="M227.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,5121.6,289.7,5128.6,227.7,5108.6z"></path>
-                                                <path
-											d="M1507.7,5108.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,5121.6,1569.7,5128.6,1507.7,5108.6z"></path>
-                                                <path
-											d="M227.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,3841.6,289.7,3848.6,227.7,3828.6z"></path>
-                                                <path
-											d="M1507.7,3828.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,3841.6,1569.7,3848.6,1507.7,3828.6z"></path>
-                                                <path
-											d="M227.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,2561.6,289.7,2568.6,227.7,2548.6z"></path>
-                                                <path
-											d="M1507.7,2548.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,2561.6,1569.7,2568.6,1507.7,2548.6z"></path>
-                                                <path
-											d="M227.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C383.7,1281.6,289.7,1288.6,227.7,1268.6z"></path>
-                                                <path
-											d="M1507.7,1268.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262        C1663.7,1281.6,1569.7,1288.6,1507.7,1268.6z"></path>
-                                            </g>
-                                        </svg>
-									<!-- END of SVG dots-->
-								</div>
+								<img class="profile-img" src="assets/images/me-removebg-preview.png" alt="Nitish Shukla" />
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</header>
-		<!-- About Section-->
-		<section class="bg-light py-5">
+
+		<div class="wave-divider">
+			<svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+				<path fill="#f3f0ff" d="M0,32L60,28C120,24,240,16,360,18.7C480,21,600,35,720,37.3C840,40,960,32,1080,26.7C1200,21,1320,19,1380,18.7L1440,18L1440,60L1380,60C1320,60,1200,60,1080,60C960,60,840,60,720,60C600,60,480,60,360,60C240,60,120,60,60,60L0,60Z"></path>
+			</svg>
+		</div>
+
+		<!-- ===== ABOUT ===== -->
+		<section class="bg-light py-5" id="about">
 			<div class="container px-5">
 				<div class="row gx-5 justify-content-center">
 					<div class="col-xxl-8">
-						<div class="text-center my-5">
-							<h2 class="display-5 fw-bolder">
-								<span class="text-gradient d-inline">About Me</span>
-							</h2>
-							<p class="lead fw-light mb-4">Hi, I'm Nitish Shukla, a
-								passionate Java Developer specializing in Spring Boot,
-								Microservices, and Web Applications.</p>
-							<p class="text-muted">"Passionate Java Developer specializing
-								in Spring Boot, Microservices, and full-stack web applications.
-								Skilled in building scalable solutions, integrating databases,
-								and optimizing performance. Constantly learning and evolving,
-								with a strong foundation in Java, DSA, and backend development."</p>
+						<div class="text-center my-5 reveal">
+							<h2 class="display-5 fw-bolder section-heading"><span class="text-gradient d-inline">About Me</span></h2>
+							<p class="lead fw-light mb-4" th:text="'Hi, this is ' + ${profile.fullName} + ', a ' + ${profile.title} + '.'">About line</p>
+							<p class="text-muted" th:text="${profile.summary}">Summary</p>
 							<div class="d-flex justify-content-center fs-2 gap-4">
-								<a class="text-gradient" href="#!"><i class="bi bi-twitter"></i></a>
-								<a class="text-gradient"
-									th:href="@{https://www.linkedin.com/in/nitish-shukla-ba208b271}"><i
-									class="bi bi-linkedin"></i></a> 
-									<a class="text-gradient" th:href="@{https://github.com/nitishshukla121}"><i class="bi bi-github"></i></a>
+								<a class="text-gradient social-icon" th:href="${profile.linkedinUrl}"><i class="bi bi-linkedin"></i></a>
+								<a class="text-gradient social-icon" th:href="${profile.githubUrl}"><i class="bi bi-github"></i></a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		</section>
 
+		<!-- ===== PROJECTS ===== -->
+		<section class="py-5" id="projects">
+			<div class="container px-5">
+				<div class="text-center mb-5">
+					<h2 class="display-5 fw-bolder mb-0 section-heading"><span class="text-gradient d-inline">Projects</span></h2>
+				</div>
+				<div class="row gx-5 justify-content-center">
+					<div class="col-lg-11 col-xl-9 col-xxl-8">
+						<div class="card overflow-hidden shadow rounded-4 border-0 mb-5 reveal project-card"
+							 th:each="project, iterStat : ${projects}"
+							 th:classappend="'accent-' + ${iterStat.index % 4}">
+							<div class="card-body p-0">
+								<div class="d-flex flex-column flex-md-row align-items-md-center">
+									<div class="p-5 flex-grow-1">
+										<h3 class="fw-bolder" th:text="${project.title}">Title</h3>
+										<p class="small text-muted fw-bold" th:text="${project.techStack}">Tech</p>
+										<p th:text="${project.description}">Description</p>
+										<a th:href="${project.githubUrl}" target="_blank" class="text-decoration-none">Explore the Project on GitHub</a>
+									</div>
+									<img class="img-fluid" style="width: 300px; height: 300px; object-fit: cover;" th:src="${project.imageUrl}" alt="Project screenshot" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ===== RESUME ===== -->
+		<section class="bg-light py-5" id="resume">
+			<div class="container px-5">
+				<div class="text-center mb-5">
+					<h2 class="display-5 fw-bolder mb-0 section-heading"><span class="text-gradient d-inline">Resume</span></h2>
+				</div>
+				<div class="row gx-5 justify-content-center">
+					<div class="col-lg-11 col-xl-9 col-xxl-8">
+
+						<div class="d-flex align-items-center justify-content-between mb-4 reveal">
+							<h3 class="text-primary fw-bolder mb-0">Experience</h3>
+							<a class="btn btn-primary px-4 py-3" th:href="${profile.resumeUrl}"><i class="bi bi-download me-2"></i>Download Resume</a>
+						</div>
+						<div class="card shadow border-0 rounded-4 mb-5 timeline-card" th:each="job : ${experience}">
+							<div class="card-body p-5">
+								<div class="row align-items-center gx-5">
+									<div class="col text-center text-lg-start mb-4 mb-lg-0">
+										<div class="bg-white p-4 rounded-4">
+											<div class="text-primary fw-bolder mb-2" th:text="${job.dateRange}">Date</div>
+											<div class="small fw-bolder" th:text="${job.title}">Title</div>
+											<div class="small text-muted" th:text="${job.subtitle}">Company</div>
+											<div class="small text-muted" th:text="${job.location}">Location</div>
+										</div>
+									</div>
+									<div class="col-lg-8"><div th:text="${job.description}">Description</div></div>
+								</div>
+							</div>
+						</div>
+
+						<h3 class="text-secondary fw-bolder mb-4">Education</h3>
+						<div class="card shadow border-0 rounded-4 mb-5 timeline-card edu-card" th:each="edu : ${education}">
+							<div class="card-body p-5">
+								<div class="row align-items-center gx-5">
+									<div class="col text-center text-lg-start mb-4 mb-lg-0">
+										<div class="bg-white p-4 rounded-4">
+											<div class="text-secondary fw-bolder mb-2" th:text="${edu.dateRange}">Date</div>
+											<div class="small fw-bolder" th:text="${edu.title}">Degree</div>
+											<div class="small text-muted" th:text="${edu.subtitle}">Institute</div>
+											<div class="small text-muted" th:text="${edu.location}">Grade</div>
+										</div>
+									</div>
+									<div class="col-lg-8"><div th:text="${edu.description}">Description</div></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card shadow border-0 rounded-4">
+							<div class="card-body p-5">
+								<div class="d-flex align-items-center mb-4">
+									<div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 me-3"><i class="bi bi-tools"></i></div>
+									<h3 class="fw-bolder mb-0"><span class="text-gradient d-inline">Skills</span></h3>
+								</div>
+								<div class="row row-cols-1 row-cols-md-3 g-3">
+									<div class="col" th:each="skill : ${skills}">
+										<div class="d-flex align-items-center justify-content-center bg-white rounded-4 p-3 h-100 fw-bold skill-pill" th:text="${skill}">Skill</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ===== CONTACT ===== -->
+		<section class="py-5" id="contact">
+			<div class="container px-5">
+				<div class="bg-light rounded-4 py-5 px-4 px-md-5">
+					<div class="text-center mb-5">
+						<div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i class="bi bi-envelope"></i></div>
+						<h2 class="fw-bolder">Get in touch</h2>
+						<p class="lead fw-normal text-muted mb-0">Let's work together!</p>
+					</div>
+					<div class="row gx-5 justify-content-center">
+						<div class="col-lg-8 col-xl-6">
+							<div class="p-4 bg-white rounded-3 shadow-sm text-center reveal">
+								<a class="text-gradient fs-3 mx-2 social-icon" th:href="'mailto:' + ${profile.email}"><i class="bi bi-envelope-fill"></i></a>
+								<a class="text-gradient fs-3 mx-2 social-icon" th:href="${profile.linkedinUrl}"><i class="bi bi-linkedin"></i></a>
+								<a class="text-gradient fs-3 mx-2 social-icon" th:href="${profile.githubUrl}"><i class="bi bi-github"></i></a>
+								<a class="text-gradient fs-3 mx-2 social-icon" th:href="'tel:' + ${profile.phone}"><i class="bi bi-telephone-fill"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 	</main>
-	<!-- Footer-->
-	<div th:replace="footer :: footer"></div>
 
-	<!-- Bootstrap core JS-->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Core theme JS-->
+	<!-- ===== FOOTER (inline, no fragment) ===== -->
+	<footer class="bg-white py-4 mt-auto">
+		<div class="container px-5">
+			<div class="row align-items-center justify-content-between flex-column flex-sm-row">
+				<div class="col-auto"><div class="small m-0">Copyright &copy; Nitish's portfolio</div></div>
+				<div class="col-auto"><a class="small" href="#contact">Contact</a></div>
+			</div>
+		</div>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:src="@{/assets/js/scripts.js}"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var revealEls = document.querySelectorAll(".reveal");
+			var observer = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					if (entry.isIntersecting) {
+						entry.target.classList.add("is-visible");
+						observer.unobserve(entry.target);
+					}
+				});
+			}, { threshold: 0.15 });
+			revealEls.forEach(function (el) { observer.observe(el); });
+		});
+	</script>
 </body>
 </html>
